@@ -1,4 +1,8 @@
+import sys
 from setuptools import setup
+
+if sys.version_info < (3, 7):
+    raise Exception("Please use Python 3.7 or higher to install")
 
 setup(
     name='open_weather_api',
