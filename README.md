@@ -7,7 +7,21 @@
 
 ## Installation
 
-OpenWeather API requires at least Python 3.7.
+OpenWeather API requires at minimum **Python 3.7**.
+
+I always recommend creating a venv to test out code like this:
+```
+python -m venv venv
+venv/bin/activate
+
+# Windows users: 
+# venv\Scripts\activate 
+```
+
+Then you can directly install from github:
+```
+pip install git+https://github.com/cdgriffith/open_weather_api.git
+```
 
 ## OpenWeatherAPI 
 
@@ -67,6 +81,40 @@ do not have the proper plan.
 | two_week_by_id | city_id |
 | two_week_by_lat_lon | lat, lon |
 
+## OpenWeather CLI 
+
+To test out the basic functionality, I included a test script to display the temperature forecast for a location.
+The script itself is the `open_weather_cli.py` file, but can be run after install using the command `forecast`. 
+
+```
+(venv) > forecast 15601 --units f
+Greensburg, US
+           |      12AM      |      3AM       |      6AM       |      9AM       |     Noon       |      3PM       |      6PM       |      9PM       |
+2019-12-14 |                                                                                                         33°F    Snow |   35°F    Snow |
+2019-12-15 |   33°F  Clouds |   34°F    Snow |   31°F    Snow |   29°F    Snow |   31°F    Snow |   29°F    Snow |   28°F  Clouds |   26°F  Clouds |
+2019-12-16 |   27°F  Clouds |   28°F    Snow |   29°F    Snow |   31°F  Clouds |   34°F  Clouds |   34°F    Rain |   34°F    Rain |   35°F    Rain |
+2019-12-17 |   35°F    Rain |   34°F    Rain |   33°F    Rain |   32°F    Snow |   34°F    Snow |   31°F    Snow |   29°F    Snow |   27°F    Snow |
+2019-12-18 |   25°F    Snow |   23°F  Clouds |   23°F    Snow |   24°F    Snow |   24°F    Snow |   20°F    Snow |   17°F    Snow |   17°F    Snow |
+2019-12-19 |   16°F  Clouds |   16°F   Clear |   16°F   Clear |   22°F   Clear |   32°F   Clear |   33°F   Clear |
+
+```
+
+Very simple usage, as show by it's help output:
+
+```
+usage: forecast [-h] [--units UNITS] [--country COUNTRY] [--token-file TOKEN_FILE] [--current] zip
+
+positional arguments:
+  zip                   zip code
+
+optional arguments:
+  -h, --help               show this help message and exit
+  --units UNITS            Temperature unit type, defaults to Kelvin, can also use "imperial" or "celsius"
+  --country COUNTRY        Country for zip code, defaults to "US"
+  --token-file TOKEN_FILE  File containing the OpenWeather API token
+  --current                View current weather conditions instead of forcast
+```
+
 ## Design Rational
 
 ### Do you use type hinting all the time?
@@ -85,7 +133,7 @@ reused settings (language, temperature units) and state information (city data),
 On top of that, there is no issue with either storing a single instance or creating a new one each time needed with
 how this was designed. 
 
-### What imports are used? 
+### Why are external imports used? 
 
 This API could have easily be written without any non-standard library code. However, the nature of Python is to 
 reuse well tested code rather than to rebuild the wheel each time. In this case I am using two of my own libraries, 

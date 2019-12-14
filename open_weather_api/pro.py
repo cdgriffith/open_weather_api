@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from typing import List, Union, Tuple
+from typing import Union
 
 from open_weather_api import OpenWeatherAPI
 
@@ -11,6 +11,11 @@ __all__ = ['OpenWeatherPro']
 
 
 class OpenWeatherPro(OpenWeatherAPI):
+    """
+        These API are only available to paid subscribers of higher tier levels at
+        https://openweathermap.org. Trying to access them with a standard free
+        api key will result in a 401 unauthorized error.
+    """
 
     def hourly_by_city(self, city: str, country: str = 'US', **kwargs) -> Box:
         return self.api_call('forecast/hourly', q=f'{city},{country}', pro=True, **kwargs)
