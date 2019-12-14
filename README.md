@@ -87,15 +87,26 @@ To test out the basic functionality, I included a test script to display the tem
 The script itself is the `open_weather_cli.py` file, but can be run after install using the command `forecast`. 
 
 ```
-(venv) > forecast 15601 --units f
-Greensburg, US
+(venv) > forecast --unit imperial --current 78645
+Leander, US
+Condition:   Clear
+Temperature: 69.55°F
+Feels like:  64.09°F
+Humidity:    43%
+Wind:        8.05mph
+Sunrise:     07:20AM
+Sunset:      05:32PM
+
+
+(venv) > forecast --country GB --unit f WC2N
+London, GB
            |      12AM      |      3AM       |      6AM       |      9AM       |     Noon       |      3PM       |      6PM       |      9PM       |
-2019-12-14 |                                                                                                         33°F    Snow |   35°F    Snow |
-2019-12-15 |   33°F  Clouds |   34°F    Snow |   31°F    Snow |   29°F    Snow |   31°F    Snow |   29°F    Snow |   28°F  Clouds |   26°F  Clouds |
-2019-12-16 |   27°F  Clouds |   28°F    Snow |   29°F    Snow |   31°F  Clouds |   34°F  Clouds |   34°F    Rain |   34°F    Rain |   35°F    Rain |
-2019-12-17 |   35°F    Rain |   34°F    Rain |   33°F    Rain |   32°F    Snow |   34°F    Snow |   31°F    Snow |   29°F    Snow |   27°F    Snow |
-2019-12-18 |   25°F    Snow |   23°F  Clouds |   23°F    Snow |   24°F    Snow |   24°F    Snow |   20°F    Snow |   17°F    Snow |   17°F    Snow |
-2019-12-19 |   16°F  Clouds |   16°F   Clear |   16°F   Clear |   22°F   Clear |   32°F   Clear |   33°F   Clear |
+2019-12-14 |                                                                                                         46°F    Rain |   43°F    Rain |
+2019-12-15 |   43°F  Clouds |   42°F   Clear |   47°F  Clouds |   47°F   Clear |   45°F  Clouds |   45°F    Rain |   45°F  Clouds |   44°F    Rain |
+2019-12-16 |   43°F    Rain |   44°F    Rain |   47°F    Rain |   47°F    Rain |   45°F  Clouds |   44°F  Clouds |   44°F  Clouds |   43°F  Clouds |
+2019-12-17 |   42°F  Clouds |   42°F  Clouds |   43°F  Clouds |   43°F  Clouds |   41°F  Clouds |   39°F  Clouds |   38°F  Clouds |   36°F  Clouds |
+2019-12-18 |   36°F  Clouds |   37°F  Clouds |   40°F  Clouds |   41°F   Clear |   39°F   Clear |   41°F  Clouds |   43°F  Clouds |   45°F  Clouds |
+2019-12-19 |   46°F    Rain |   48°F    Rain |   50°F    Rain |   50°F  Clouds |   46°F  Clouds |   45°F  Clouds |
 
 ```
 
