@@ -3,9 +3,11 @@
 
 from typing import List, Union, Tuple
 
-from open_weather_wrapper import OpenWeatherAPI
+from open_weather_api import OpenWeatherAPI
 
 from box import Box
+
+__all__ = ['OpenWeatherPro']
 
 
 class OpenWeatherPro(OpenWeatherAPI):

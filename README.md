@@ -1,1 +1,2 @@
-# open_weather_wrapper
+# OpenWeather API 
+
