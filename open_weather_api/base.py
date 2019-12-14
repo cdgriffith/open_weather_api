@@ -63,10 +63,7 @@ class OpenWeatherAPI:
 
     def _download_city_list(self):
         if not self.city_file_location.exists():
-            try:
-                self.city_file_location.parent.mkdir(parents=True, exist_ok=True)
-            except OSError:
-                user_path = Path('city.list.json.gz')
+            self.city_file_location.parent.mkdir(parents=True, exist_ok=True)
             reusables.download('http://bulk.openweathermap.org/sample/city.list.json.gz',
                                filename=str(self.city_file_location))
         self.city_ids = BoxList.from_json(gzip.open(self.city_file_location).read())
@@ -105,7 +102,7 @@ class OpenWeatherAPI:
     def current_multiple_by_cycle(self, lat: Union[int, float, str], lon: Union[int, float, str],
                                   cities: Union[int, str] = 10, **kwargs) -> Box:
         """Multiple city weather data within a circle from a fixed point"""
-        if not isinstance(cities, int) or 1 < cities > 50:
+        if not isinstance(cities, int) or cities > 50 or cities < 1:
             raise OpenWeatherError('Number of cities requested must be between 1 and 50')
         return self.api_call('find', lat=lat, lon=lon, cnt=cities, **kwargs)
 

@@ -44,6 +44,30 @@ class TestOpenWeatherAPI:
             f'{api_base}/weather',
             params={'lat': 10, 'lon': 20, 'APPID': 'TEST_API_KEY', 'units': 'imperial'})
 
+    def test_forecast_city(self):
+        self.api.forecast_by_city('London', country='UK')
+        open_weather_api.base.requests.get.assert_called_with(
+            f'{api_base}/forecast',
+            params={'q': 'London,UK', 'APPID': 'TEST_API_KEY', 'units': 'imperial'})
+
+    def test_forecast_id(self):
+        self.api.forecast_by_id(2323)
+        open_weather_api.base.requests.get.assert_called_with(
+            f'{api_base}/forecast',
+            params={'id': 2323, 'APPID': 'TEST_API_KEY', 'units': 'imperial'})
+
+    def test_forecast_zip(self):
+        self.api.forecast_by_zip_code(15601)
+        open_weather_api.base.requests.get.assert_called_with(
+            f'{api_base}/forecast',
+            params={'zip': '15601,US', 'APPID': 'TEST_API_KEY', 'units': 'imperial'})
+
+    def test_forecast_lat_lon(self):
+        self.api.forecast_by_lat_lon(lat=10, lon=20)
+        open_weather_api.base.requests.get.assert_called_with(
+            f'{api_base}/forecast',
+            params={'lat': 10, 'lon': 20, 'APPID': 'TEST_API_KEY', 'units': 'imperial'})
+
     def test_search(self):
         result = self.api.city_search('rast')
         assert result[0].id == 727762
@@ -65,6 +89,14 @@ class TestOpenWeatherAPI:
         open_weather_api.base.requests.get.assert_called_with(
             f'{api_base}/find',
             params={'lat': 1, 'lon': 2, 'cnt': 10, 'APPID': 'TEST_API_KEY', 'units': 'imperial'})
+
+    def test_bad_multiple_circle(self):
+        with pytest.raises(OpenWeatherError):
+            self.api.current_multiple_by_cycle(1, 2, 0)
+        with pytest.raises(OpenWeatherError):
+            self.api.current_multiple_by_cycle(1, 2, 51)
+        with pytest.raises(OpenWeatherError):
+            self.api.current_multiple_by_cycle(1, 2, 'true')
 
     def test_api_call(self):
         open_weather_api.base.requests.get.return_value = FakeRequest(ok=False, status_code=500)

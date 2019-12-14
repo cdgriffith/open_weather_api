@@ -38,7 +38,29 @@ class TestOpenWeatherAPI:
             f'{api_base}/forecast/hourly',
             params={'lat': 10, 'lon': 20, 'APPID': 'TEST_API_KEY', 'units': 'imperial'})
 
+    def test_two_week_city(self):
+        self.api.two_week_by_city('London', country='UK')
+        open_weather_api.base.requests.get.assert_called_with(
+            f'{api_base}/forecast/daily',
+            params={'q': 'London,UK', 'APPID': 'TEST_API_KEY', 'units': 'imperial'})
 
+    def test_two_week_id(self):
+        self.api.two_week_by_id(2323)
+        open_weather_api.base.requests.get.assert_called_with(
+            f'{api_base}/forecast/daily',
+            params={'id': 2323, 'APPID': 'TEST_API_KEY', 'units': 'imperial'})
+
+    def test_two_week_zip(self):
+        self.api.two_week_by_zip_code(15601)
+        open_weather_api.base.requests.get.assert_called_with(
+            f'{api_base}/forecast/daily',
+            params={'zip': '15601,US', 'APPID': 'TEST_API_KEY', 'units': 'imperial'})
+
+    def test_two_week_lat_lon(self):
+        self.api.two_week_by_lat_lon(lat=10, lon=20)
+        open_weather_api.base.requests.get.assert_called_with(
+            f'{api_base}/forecast/daily',
+            params={'lat': 10, 'lon': 20, 'APPID': 'TEST_API_KEY', 'units': 'imperial'})
 
 
 

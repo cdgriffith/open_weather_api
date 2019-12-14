@@ -27,7 +27,7 @@ class OpenWeatherPro(OpenWeatherAPI):
     def two_week_by_city(self, city: str, country: str = 'US', **kwargs) -> Box:
         return self.api_call('forecast/daily', q=f'{city},{country}', pro=True, **kwargs)
 
-    def two_week_zip_code(self, zip_code: Union[int, str], country: str = 'US', **kwargs) -> Box:
+    def two_week_by_zip_code(self, zip_code: Union[int, str], country: str = 'US', **kwargs) -> Box:
         return self.api_call('forecast/daily', zip=f'{zip_code},{country}', pro=True, **kwargs)
 
     def two_week_by_id(self, country_id: Union[int, str], **kwargs) -> Box:
