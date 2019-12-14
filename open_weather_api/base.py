@@ -26,8 +26,9 @@ class OpenWeatherAPI:
     api_key: str
     api_version: str = '2.5'
     units: str = 'imperial'
-    city_ids: BoxList = None
+    city_info: BoxList = None
     lang: str = None
+    city_file_location: Path = Path(user_data_dir('OpenWeatherAPI'), 'city.list.json.gz')
 
     def api_call(self, endpoint: str, mode: str = 'json',
                  parse_json: bool = True, pro: bool = False, **parameters):
@@ -54,28 +55,27 @@ class OpenWeatherAPI:
 
         try:
             message = result.json()["message"]
-        except ValueError:
+        except (ValueError, KeyError):
             message = result.text
 
         raise OpenWeatherAPIError(f'Error code {result.status_code} '
                                   f'while calling endpoint "{url}": {message}')
 
     def _download_city_list(self):
-        user_path = Path(user_data_dir('OpenWeatherAPI'), 'city.list.json.gz')
-        if not user_path.exists():
+        if not self.city_file_location.exists():
             try:
-                user_path.parent.mkdir(parents=True, exist_ok=True)
+                self.city_file_location.parent.mkdir(parents=True, exist_ok=True)
             except OSError:
                 user_path = Path('city.list.json.gz')
             reusables.download('http://bulk.openweathermap.org/sample/city.list.json.gz',
-                               filename=str(user_path))
-        self.city_ids = BoxList.from_json(gzip.open(user_path).read())
+                               filename=str(self.city_file_location))
+        self.city_ids = BoxList.from_json(gzip.open(self.city_file_location).read())
 
     def city_search(self, city_name: str) -> BoxList:
         """Use the downloaded city data to find a city's ID, lat and lon"""
-        if not self.city_ids:
+        if not self.city_info:
             self._download_city_list()
-        return BoxList(city for city in self.city_ids
+        return BoxList(city for city in self.city_info
                        if city_name.casefold() in city.name.casefold())
 
     def current_by_city(self, city: str, country: str = 'US', **kwargs) -> Box:

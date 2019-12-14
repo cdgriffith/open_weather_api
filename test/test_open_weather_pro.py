@@ -12,6 +12,7 @@ class TestOpenWeatherAPI:
     @pytest.fixture(autouse=True)
     def new_instances(self):
         self.api = OpenWeatherPro('TEST_API_KEY')
+        open_weather_api.base.requests.get.return_value = FakeRequest()
 
     def test_hourly_city(self):
         self.api.hourly_by_city('London', country='UK')

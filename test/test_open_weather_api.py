@@ -1,7 +1,10 @@
+from pathlib import Path
+
 import pytest
 from box import BoxList
 
 from .common import *
+from open_weather_api import OpenWeatherError
 
 api_base = 'https://api.openweathermap.org/data/2.5'
 
@@ -13,8 +16,9 @@ class TestOpenWeatherAPI:
 
     @pytest.fixture(autouse=True)
     def new_instances(self):
-        self.api = open_weather_api.base.OpenWeatherAPI('TEST_API_KEY',
-                                                        city_ids=cities)
+        self.api = open_weather_api.base.OpenWeatherAPI('TEST_API_KEY', city_info=cities,
+                                                        city_file_location=Path('test_file'))
+        open_weather_api.base.requests.get.return_value = FakeRequest()
 
     def test_current_city(self):
         self.api.current_by_city('London', country='UK')
@@ -57,7 +61,27 @@ class TestOpenWeatherAPI:
             params={'id': '1,2', 'APPID': 'TEST_API_KEY', 'units': 'imperial'})
 
     def test_multiple_circle(self):
-        self.api.current_multiple_by_cycle(1,2,10)
+        self.api.current_multiple_by_cycle(1, 2, 10)
         open_weather_api.base.requests.get.assert_called_with(
             f'{api_base}/find',
             params={'lat': 1, 'lon': 2, 'cnt': 10, 'APPID': 'TEST_API_KEY', 'units': 'imperial'})
+
+    def test_api_call(self):
+        open_weather_api.base.requests.get.return_value = FakeRequest(ok=False, status_code=500)
+        self.api.lang = 'ru'
+        with pytest.raises(OpenWeatherError):
+            self.api.api_call('test', mode='xml')
+
+    def test_download(self):
+        open_weather_api.base.reusables.download = MagicMock()
+        open_weather_api.base.gzip = MagicMock()
+
+        class FakeFile:
+            def read(self):
+                return '[]'
+
+        open_weather_api.base.gzip.open.return_value = FakeFile()
+        self.api._download_city_list()
+        open_weather_api.base.reusables.download.assert_called_with(
+            'http://bulk.openweathermap.org/sample/city.list.json.gz',
+            filename='test_file')
