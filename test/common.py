@@ -22,4 +22,3 @@ class FakeRequest:
 
 open_weather_api.base.requests = MagicMock()
 open_weather_api.base.requests.get.return_value = FakeRequest()
-

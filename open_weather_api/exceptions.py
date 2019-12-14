@@ -8,4 +8,3 @@ class OpenWeatherError(Exception):
 
 class OpenWeatherAPIError(OpenWeatherError):
     """An unexpected api condition was reached"""
-

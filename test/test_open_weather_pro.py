@@ -66,6 +66,5 @@ class TestOpenWeatherAPI:
             params={'lat': 10, 'lon': 20, 'APPID': 'TEST_API_KEY'})
 
 
-
 if __name__ == '__main__':
     pytest.main()
