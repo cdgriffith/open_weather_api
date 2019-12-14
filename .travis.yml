@@ -4,6 +4,6 @@ python:
   - "3.8"
 install:
     - pip install -r requirements.txt
-    - pip install pytest coveralls
+    - pip install pytest coveralls pytest-cov
 script: PYTHONPATH=. py.test --cov=open_weather_api test/
 after_success: coveralls

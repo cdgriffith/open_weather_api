@@ -78,7 +78,7 @@ class OpenWeatherAPI:
         return BoxList(city for city in self.city_ids
                        if city_name.casefold() in city.name.casefold())
 
-    def current_by_city(self, city: str, country: str = 'us', **kwargs) -> Box:
+    def current_by_city(self, city: str, country: str = 'US', **kwargs) -> Box:
         """Grab current weather data by city name"""
         return self.api_call('weather', q=f'{city},{country}', **kwargs)
 
@@ -117,7 +117,7 @@ class OpenWeatherAPI:
             city_ids = ','.join((str(x) for x in city_ids))
         return self.api_call('group', id=city_ids, **kwargs)
 
-    def forecast_by_city(self, city: str, country: str = 'us', **kwargs) -> Box:
+    def forecast_by_city(self, city: str, country: str = 'US', **kwargs) -> Box:
         """Grab future forecast weather data by city name"""
         return self.api_call('forecast', q=f'{city},{country}', **kwargs)
 
