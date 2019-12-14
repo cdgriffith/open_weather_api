@@ -25,31 +25,35 @@ class OpenWeatherAPI:
 
     api_key: str
     api_version: str = '2.5'
-    units: str = 'imperial'
+    units: str = None
     city_info: BoxList = None
     lang: str = None
+    mode: str = None
     city_file_location: Path = Path(user_data_dir('OpenWeatherAPI'), 'city.list.json.gz')
 
-    def api_call(self, endpoint: str, mode: str = 'json',
-                 parse_json: bool = True, pro: bool = False, **parameters):
+    def api_call(self, endpoint: str, mode: str = None,
+                 parse_json: bool = True, pro: bool = False,
+                 api_key: str = None, units: str = None, lang: str = None,
+                 **parameters):
         """
             Direct call to the OpenWeather API that handles incorporating the
             API key and other parameters then proper handling of the response.
         """
-        parameters['APPID'] = self.api_key
-        parameters['units'] = self.units
-        if self.lang:
-            parameters['lang'] = self.lang
-        if mode != 'json':
+        parameters['APPID'] = api_key or self.api_key
+        if units or self.units:
+            parameters['units'] = units or self.units
+        if lang or self.lang:
+            parameters['lang'] = lang or self.lang
+        if mode or self.mode:
             # The API does not want a mode being set if requesting the default JSON
-            parameters['mode'] = mode
+            parameters['mode'] = mode or self.mode
 
         url = f'https://{"pro" if pro else "api"}.openweathermap.org/data/{self.api_version}/{endpoint}'
 
         result = requests.get(url, params=parameters)
 
         if result.ok:
-            if mode == 'json' and parse_json:
+            if not mode and not self.mode and parse_json:
                 return Box(result.json())
             return result.text
 
@@ -100,11 +104,11 @@ class OpenWeatherAPI:
         return self.api_call('box/city', bbox=f'{lon_left},{lat_bottom},{lon_right},{lat_top},{zoom}', **kwargs)
 
     def current_multiple_by_cycle(self, lat: Union[int, float, str], lon: Union[int, float, str],
-                                  cities: Union[int, str] = 10, **kwargs) -> Box:
+                                  city_count: Union[int, str] = 10, **kwargs) -> Box:
         """Multiple city weather data within a circle from a fixed point"""
-        if not isinstance(cities, int) or cities > 50 or cities < 1:
+        if not isinstance(city_count, int) or city_count > 50 or city_count < 1:
             raise OpenWeatherError('Number of cities requested must be between 1 and 50')
-        return self.api_call('find', lat=lat, lon=lon, cnt=cities, **kwargs)
+        return self.api_call('find', lat=lat, lon=lon, cnt=city_count, **kwargs)
 
     def current_multiple_by_id(self, city_ids: Union[List, Tuple, str], **kwargs) -> Box:
         """Multiple city weather data gathered by their OpenWeather city IDs"""
