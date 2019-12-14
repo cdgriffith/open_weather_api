@@ -1,3 +1,6 @@
+[![Coverage Status](https://coveralls.io/repos/github/cdgriffith/open_weather_api/badge.svg?branch=development)](https://coveralls.io/github/cdgriffith/open_weather_api?branch=development)
+[![Build Status](https://travis-ci.org/cdgriffith/open_weather_api.svg?branch=development)](https://travis-ci.org/cdgriffith/open_weather_api/branches)
+
 # OpenWeather API 
 
 > This is demo software and should not be used in production

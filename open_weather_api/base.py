@@ -62,8 +62,9 @@ class OpenWeatherAPI:
         except (ValueError, KeyError):
             message = result.text
 
+        del parameters['APPID']
         raise OpenWeatherAPIError(f'Error code {result.status_code} '
-                                  f'while calling endpoint "{url}": {message}')
+                                  f'while calling endpoint "{url}" with parameters {parameters}: {message}')
 
     def _download_city_list(self):
         if not self.city_file_location.exists():

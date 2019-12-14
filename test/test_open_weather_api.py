@@ -98,11 +98,17 @@ class TestOpenWeatherAPI:
         with pytest.raises(OpenWeatherError):
             self.api.current_multiple_by_cycle(1, 2, 'true')
 
-    def test_api_call(self):
+    def test_bad_api_call(self):
         open_weather_api.base.requests.get.return_value = FakeRequest(ok=False, status_code=500)
         self.api.lang = 'ru'
         with pytest.raises(OpenWeatherError):
             self.api.api_call('test', mode='xml')
+
+    def test_param_overload_api_call(self):
+        self.api.api_call('test', mode='xml', lang='ru', units='metric')
+        open_weather_api.base.requests.get.assert_called_with(
+            f'{api_base}/test',
+            params={'mode': 'xml', 'lang': 'ru', 'units': 'metric', 'APPID': 'TEST_API_KEY'})
 
     def test_download(self):
         open_weather_api.base.reusables.download = MagicMock()

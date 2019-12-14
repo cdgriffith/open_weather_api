@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from unittest.mock import MagicMock
 from dataclasses import dataclass
 from typing import Dict
