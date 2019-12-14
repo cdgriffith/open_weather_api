@@ -1,11 +1,9 @@
 sudo: required
-matrix:
-  include:
-    - python: "3.8"
-      dist: xenial
-      sudo: true
+language: python
+python:
+  - "3.8"
 install:
-    - pip install -r requirement.txt
+    - pip install -r requirements.txt
     - pip install pytest coveralls
 script: PYTHONPATH=. py.test --cov=open_weather_api test/
 after_success: coveralls
