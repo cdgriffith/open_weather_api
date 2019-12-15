@@ -124,6 +124,15 @@ class TestOpenWeatherAPI:
             'http://bulk.openweathermap.org/sample/city.list.json.gz',
             filename='test_file')
 
+    def test_city_search_download(self):
+        original = self.api._download_city_list
+        self.api._download_city_list = lambda: cities
+        self.api.city_info = None
+        try:
+            assert len(self.api.city_search('rast')) == 1
+        finally:
+            self.api._download_city_list = original
+
     def test_bad_city_search_download(self):
         original = self.api._download_city_list
         self.api._download_city_list = lambda: None
@@ -146,3 +155,4 @@ class TestOpenWeatherAPI:
             assert len(self.api.city_search('test')) == 0
         finally:
             self.api._download_city_list = original
+
