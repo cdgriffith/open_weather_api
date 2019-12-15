@@ -19,7 +19,7 @@ def get_owa_class(token_file, units=None):
     token = token_file.read_text().strip() if token_file.exists() else None
     if not token:
         print(f'Could not read token file "{token_file}"')
-        token = input('Please enter token: ')
+        token = input('Please enter token: ').strip()
     return OpenWeatherAPI(token, units=units)
 
 
@@ -73,15 +73,11 @@ def get_units(args):
 
 def main():
     parser = ArgumentParser('forecast')
-    parser.add_argument('--units', help='Temperature unit type, defaults to Kelvin, '
-                                        'can also use "imperial" or "celsius" ')
-    parser.add_argument('--country', default='US',
-                        help='Country for zip code, defaults to "US"')
-    parser.add_argument('--token-file', default='.open_weather_token',
-                        help='File containing the OpenWeather API token')
+    parser.add_argument('--units', help='Temperature units, defaults to Kelvin, can also use "imperial" or "celsius" ')
+    parser.add_argument('--country', default='US', help='Country for zip code, defaults to "US"')
+    parser.add_argument('--token-file', default='.open_weather_token', help='File containing the OpenWeather API token')
+    parser.add_argument('--current', help='View current weather conditions', action='store_true')
     parser.add_argument('zip', nargs=1, help='zip code')
-    parser.add_argument('--current', help='View current weather conditions',
-                        action='store_true')
 
     args = parser.parse_args(namespace=Box())
     units, unit_type = get_units(args)
@@ -93,7 +89,7 @@ def main():
             return current(owa.current_by_zip_code(args.zip[0], country=args.country), unit_type)
         return future(owa.forecast_by_zip_code(args.zip[0], country=args.country), unit_type)
     except KeyError:
-        print("Warning: That location did not include all expect output, please try another zip, like 15601")
+        print("Warning: That location did not include all expected output, please try another zip, like 15601")
 
 
 if __name__ == '__main__':

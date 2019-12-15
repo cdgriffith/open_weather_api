@@ -65,8 +65,12 @@ After the class is initialized, the following methods are available.
 
 ## OpenWeatherPro
 
-This functionality is only available to higher tier price packages, and will return a `401 unauthorized` error if you
-do not have the proper plan. 
+If you have a paid subscription to more features, you will want to use the `OpenWeatherPro` class. It is a subclass
+of `OpenWeatherAPI` and has all the base features, plus those included below. It takes the same arguments as 
+`OpenWeatherAPI` with only the `api_key` being the hard requirements. 
+
+This functionality is only available to the higher tier price packages, and will return a `401 unauthorized` 
+error if you do not have the proper plan. 
 
 | method | parameters |
 | --- | --- |
@@ -157,7 +161,7 @@ for talking to the OpenWeather endpoints.
 
 The normal usage of the API does not require the city data, which takes a considerable amount of time to download
 and load into memory. It is meant to only be helpful for finding a city's id or location when it cannot be easily 
-obtained through a loser name or zip code search. 
+obtained through a looser name or zip code search. 
 
 ### Why can everything be overloaded in `api_call`?
 
