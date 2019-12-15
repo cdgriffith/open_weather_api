@@ -43,7 +43,7 @@ def future(data, unit_type):
     last_date = datetime.fromtimestamp(data.list[0].dt).strftime('%Y-%m-%d')
     print("           |      12AM      |      3AM       |      6AM       |      9AM       |"
           "     Noon       |      3PM       |      6PM       |      9PM       |")
-    current_row = f'{last_date} | {{padding}}'
+    current_row = f'{last_date} |{{padding}}'
     for item in data.list:
         dt_object = datetime.fromtimestamp(item.dt)
         day = dt_object.strftime('%Y-%m-%d')
@@ -51,7 +51,7 @@ def future(data, unit_type):
             last_date = day
             print(current_row.format(padding=' ' * (157 - len(current_row))))
             current_row = f'{day} |'
-        current_row = f'{current_row} {int(item.main.temp):>4d}°{unit_type}{item.weather[0].main:>8} |'
+        current_row = f'{current_row} {int(item.main.temp):>4d}°{unit_type}{item.weather[0].main[:8]:>8} |'
     print(current_row)
 
 
