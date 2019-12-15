@@ -90,6 +90,11 @@ error if you do not have the proper plan.
 To test out the basic functionality, I included a test script to display the temperature forecast for a location.
 The script itself is the `open_weather_cli.py` file, but can be run after install using the command `forecast`. 
 
+By default it will look for your token in a file called `.open_weather_token` in the current directory, but can also
+be provided during runtime if the file does not exist. 
+
+Access current conditions with the `current` flag.
+
 ```
 (venv) > forecast --unit imperial --current 78645
 Leander, US
@@ -100,8 +105,11 @@ Humidity:    43%
 Wind:        8.05mph
 Sunrise:     07:20AM
 Sunset:      05:32PM
+```
 
+It is also possible to use different countries zip codes, but you do need to provide the country's two letter code. 
 
+```
 (venv) > forecast --country GB --unit f WC2N
 London, GB
            |      12AM      |      3AM       |      6AM       |      9AM       |     Noon       |      3PM       |      6PM       |      9PM       |
@@ -114,7 +122,7 @@ London, GB
 
 ```
 
-Very simple usage, as show by it's help output:
+`forecast` has very simple usage, as show by it's help output:
 
 ```
 usage: forecast [-h] [--units UNITS] [--country COUNTRY] [--token-file TOKEN_FILE] [--current] zip
