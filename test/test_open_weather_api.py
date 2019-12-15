@@ -123,3 +123,26 @@ class TestOpenWeatherAPI:
         open_weather_api.base.reusables.download.assert_called_with(
             'http://bulk.openweathermap.org/sample/city.list.json.gz',
             filename='test_file')
+
+    def test_bad_city_search_download(self):
+        original = self.api._download_city_list
+        self.api._download_city_list = lambda: None
+        self.api.city_info = None
+        try:
+            with pytest.raises(OpenWeatherError):
+                self.api.city_search('test')
+        finally:
+            self.api._download_city_list = original
+
+    def test_bad_city_search_download_exception(self):
+        original = self.api._download_city_list
+        self.api.city_info = None
+
+        def raise_me():
+            raise Exception('test')
+
+        self.api._download_city_list = raise_me
+        try:
+            assert len(self.api.city_search('test')) == 0
+        finally:
+            self.api._download_city_list = original

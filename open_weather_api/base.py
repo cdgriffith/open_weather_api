@@ -71,14 +71,20 @@ class OpenWeatherAPI:
             self.city_file_location.parent.mkdir(parents=True, exist_ok=True)
             reusables.download('http://bulk.openweathermap.org/sample/city.list.json.gz',
                                filename=str(self.city_file_location))
-        self.city_info = BoxList.from_json(gzip.open(self.city_file_location).read())
+        return BoxList.from_json(gzip.open(self.city_file_location).read())
 
     def city_search(self, city_name: str) -> BoxList:
         """Use the downloaded city data to find a city's ID, lat and lon"""
         if not self.city_info:
-            self._download_city_list()
-            if not self.city_info:
-                raise OpenWeatherError('Cannot load city data!')
+            try:
+                city_info = self._download_city_list()
+            except Exception as err:
+                print(f'Could not download or transform city information: {err}')
+                return BoxList()
+            else:
+                if not city_info:
+                    raise OpenWeatherError('Cannot load city data!')
+                self.city_info = city_info
         return BoxList(city for city in self.city_info
                        if city_name.casefold() in city.name.casefold())
 
