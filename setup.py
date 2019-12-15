@@ -6,7 +6,7 @@ if sys.version_info < (3, 7):
 
 setup(
     name='open_weather_api',
-    version='1.0.0',
+    version='1.2',
     url='https://github.com/cdgriffith/open_weather_api',
     author='Chris Griffith',
     tests_require=["pytest", "coverage >= 3.6", "pytest-cov"],

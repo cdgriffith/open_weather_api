@@ -26,9 +26,9 @@ class OpenWeatherAPI:
     api_key: str
     api_version: str = '2.5'
     units: str = None
-    city_info: BoxList = None
     lang: str = None
     mode: str = None
+    city_info: BoxList = None
     city_file_location: Path = Path(user_data_dir('OpenWeatherAPI'), 'city.list.json.gz')
 
     def api_call(self, endpoint: str, mode: str = None,
